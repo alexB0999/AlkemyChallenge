@@ -27,11 +27,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder
-public class Personaje {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+public class Personaje extends BaseEntity{
 	
 	//@NonNull
 	private String nombre;

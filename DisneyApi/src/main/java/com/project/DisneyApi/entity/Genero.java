@@ -23,11 +23,7 @@ import lombok.ToString.Exclude;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Genero {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+public class Genero extends BaseEntity{
 	
 	//@NonNull
 	private String nombre;
