@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.DisneyApi.dto.Mensaje;
 import com.project.DisneyApi.dto.PersonajeDTO;
 import com.project.DisneyApi.entity.Personaje;
-import com.project.DisneyApi.service.PersonajeService;
+import com.project.DisneyApi.service.PersonajeServiceImpl;
 
 @RestController
 @RequestMapping("/characters")
@@ -27,7 +27,7 @@ import com.project.DisneyApi.service.PersonajeService;
 public class PersonajeController {
 	
 	@Autowired
-	PersonajeService personajeService;
+	PersonajeServiceImpl personajeService;
 	
 	@GetMapping("/lista")
 	public ResponseEntity<List<Personaje>> list(){
@@ -36,11 +36,11 @@ public class PersonajeController {
 	}
 	
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<Personaje> getById(@PathVariable("id") int id){
+	public ResponseEntity<Personaje> getById(@PathVariable("id") Long id){
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		Personaje pelicula = personajeService.getOne(id).get();
-		return new ResponseEntity(pelicula, HttpStatus.OK);
+		Personaje personaje = personajeService.getOne(id).get();
+		return new ResponseEntity(personaje, HttpStatus.OK);
 	}
 	
 	@GetMapping("/detailname/{nombre}")
@@ -84,7 +84,7 @@ public class PersonajeController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody PersonajeDTO personajeDTO){
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PersonajeDTO personajeDTO){
 		// Valido existencia del personaje a actualizar
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
@@ -116,7 +116,7 @@ public class PersonajeController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") int id){
+	public ResponseEntity<?> delete(@PathVariable("id") Long id){
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		personajeService.delete(id);

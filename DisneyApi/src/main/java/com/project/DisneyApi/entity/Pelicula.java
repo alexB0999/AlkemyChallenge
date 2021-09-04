@@ -34,11 +34,7 @@ import lombok.ToString.Exclude;
 @Data
 @ToString
 @Builder
-public class Pelicula {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+public class Pelicula extends BaseEntity{
 	
 	//@NonNull
 	private String titulo;

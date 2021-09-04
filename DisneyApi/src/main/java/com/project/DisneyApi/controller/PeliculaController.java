@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.DisneyApi.dto.Mensaje;
 import com.project.DisneyApi.dto.PeliculaDTO;
 import com.project.DisneyApi.entity.Pelicula;
-import com.project.DisneyApi.service.PeliculaService;
+import com.project.DisneyApi.service.PeliculaServiceImpl;
 
 @RestController
 @RequestMapping("/movies")
@@ -27,7 +27,7 @@ import com.project.DisneyApi.service.PeliculaService;
 public class PeliculaController {
 	
 	@Autowired
-	PeliculaService peliculaService;
+	PeliculaServiceImpl peliculaService;
 	
 	@GetMapping("/lista")
 	public ResponseEntity<List<Pelicula>> list(){
@@ -36,7 +36,7 @@ public class PeliculaController {
 	}
 	
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<Pelicula> getById(@PathVariable("id") int id){
+	public ResponseEntity<Pelicula> getById(@PathVariable("id") Long id){
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		Pelicula pelicula = peliculaService.getOne(id).get();
@@ -72,7 +72,7 @@ public class PeliculaController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody PeliculaDTO peliculaDTO){
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PeliculaDTO peliculaDTO){
 		// Valido existencia de la pelicula a actualizar
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
@@ -99,7 +99,7 @@ public class PeliculaController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") int id){
+	public ResponseEntity<?> delete(@PathVariable("id") Long id){
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		peliculaService.delete(id);
