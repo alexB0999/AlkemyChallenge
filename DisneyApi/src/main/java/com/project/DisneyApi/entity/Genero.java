@@ -28,8 +28,8 @@ public class Genero extends BaseEntity{
 	//@NonNull
 	private String nombre;
 	
-	//No incluir bidireccinalidad hasta solucionar bucle
-	/*@OneToMany(mappedBy = "genero")
+
+	@OneToMany(mappedBy = "genero")
 	@Exclude
-	private List<Pelicula>peliculas = new ArrayList<Pelicula>();*/
+	private List<Pelicula>peliculas = new ArrayList<Pelicula>();
 }

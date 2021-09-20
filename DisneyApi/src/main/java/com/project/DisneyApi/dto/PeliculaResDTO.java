@@ -8,9 +8,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
-import com.project.DisneyApi.entity.Genero;
-import com.project.DisneyApi.entity.Personaje;
-
 import lombok.*;
 
 @AllArgsConstructor
@@ -18,7 +15,7 @@ import lombok.*;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class PeliculaDTO {
+public class PeliculaResDTO {
 	
 	@NotBlank
 	@NonNull
@@ -33,8 +30,8 @@ public class PeliculaDTO {
 	@NotBlank
 	private int calificacion;
 	
-	private Genero genero;
+	private String genero;
 	
-	private List<Personaje>personajes = new ArrayList<Personaje>();
+	private List<PersonajeForPeliculaResDTO>personajes = new ArrayList<PersonajeForPeliculaResDTO>();
 	
 }

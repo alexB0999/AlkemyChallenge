@@ -15,7 +15,7 @@ import java.util.List;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class PersonajeDTO {
+public class PersonajeResDTO {
 	
 	@NotBlank
 	private String nombre;
@@ -26,6 +26,6 @@ public class PersonajeDTO {
 	
 	private String historia;
 	
-	private List<PeliculaForPersonajeDTO>peliculas = new ArrayList<>();
+	private List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
 
 }

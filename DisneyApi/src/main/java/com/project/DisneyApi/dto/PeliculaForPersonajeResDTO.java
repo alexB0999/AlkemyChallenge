@@ -13,7 +13,7 @@ import java.util.Date;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class PeliculaForPersonajeDTO {
+public class PeliculaForPersonajeResDTO {
 
     @NotBlank
     @NonNull

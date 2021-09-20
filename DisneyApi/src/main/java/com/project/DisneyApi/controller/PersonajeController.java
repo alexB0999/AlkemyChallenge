@@ -3,8 +3,7 @@ package com.project.DisneyApi.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.project.DisneyApi.dto.ListPersonajesDTO;
-import com.project.DisneyApi.dto.PeliculaForPersonajeDTO;
+import com.project.DisneyApi.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.DisneyApi.dto.Mensaje;
-import com.project.DisneyApi.dto.PersonajeDTO;
 import com.project.DisneyApi.entity.Personaje;
 import com.project.DisneyApi.service.PersonajeServiceImpl;
 
@@ -45,31 +42,31 @@ public class PersonajeController {
 	}
 	
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<PersonajeDTO> getById(@PathVariable("id") Long id){
+	public ResponseEntity<PersonajeResDTO> getById(@PathVariable("id") Long id){
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		Personaje personaje = personajeService.getOne(id).get();
 
-		PersonajeDTO personajeDTO = new PersonajeDTO();
-		personajeDTO.setNombre(personaje.getNombre());
-		personajeDTO.setEdad(personaje.getEdad());
-		personajeDTO.setPeso(personaje.getPeso());
-		personajeDTO.setHistoria(personaje.getHistoria());
+		PersonajeResDTO personajeResDTO = new PersonajeResDTO();
+		personajeResDTO.setNombre(personaje.getNombre());
+		personajeResDTO.setEdad(personaje.getEdad());
+		personajeResDTO.setPeso(personaje.getPeso());
+		personajeResDTO.setHistoria(personaje.getHistoria());
 
-		PeliculaForPersonajeDTO peliculaForPersonajeDTO = new PeliculaForPersonajeDTO();
+		PeliculaForPersonajeResDTO peliculaForPersonajeResDTO = new PeliculaForPersonajeResDTO();
 
-		List<PeliculaForPersonajeDTO>peliculas = new ArrayList<>();
+		List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
 
 		for (int i = 0; i < personaje.getPeliculas().size(); i++) {
-			peliculaForPersonajeDTO.setTitulo(personaje.getPeliculas().get(i).getTitulo());
-			peliculaForPersonajeDTO.setFechaCreacion(personaje.getPeliculas().get(i).getFechaCreacion());
-			peliculaForPersonajeDTO.setCalificacion(personaje.getPeliculas().get(i).getCalificacion());
-			peliculaForPersonajeDTO.setGenero(personaje.getPeliculas().get(i).getGenero().getNombre());
-			peliculas.add(peliculaForPersonajeDTO);
+			peliculaForPersonajeResDTO.setTitulo(personaje.getPeliculas().get(i).getTitulo());
+			peliculaForPersonajeResDTO.setFechaCreacion(personaje.getPeliculas().get(i).getFechaCreacion());
+			peliculaForPersonajeResDTO.setCalificacion(personaje.getPeliculas().get(i).getCalificacion());
+			peliculaForPersonajeResDTO.setGenero(personaje.getPeliculas().get(i).getGenero().getNombre());
+			peliculas.add(peliculaForPersonajeResDTO);
 		}
 
-		personajeDTO.setPeliculas(peliculas);
-		return new ResponseEntity(personajeDTO, HttpStatus.OK);
+		personajeResDTO.setPeliculas(peliculas);
+		return new ResponseEntity(personajeResDTO, HttpStatus.OK);
 	}
 	
 	@GetMapping("/detailname/{nombre}")
@@ -77,7 +74,26 @@ public class PersonajeController {
 		if(!personajeService.existsByNombre(nombre)) 
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		Personaje personaje = personajeService.getByNombre(nombre).get();
-		return new ResponseEntity(personaje, HttpStatus.OK);
+		PersonajeResDTO personajeResDTO = new PersonajeResDTO();
+		personajeResDTO.setNombre(personaje.getNombre());
+		personajeResDTO.setEdad(personaje.getEdad());
+		personajeResDTO.setPeso(personaje.getPeso());
+		personajeResDTO.setHistoria(personaje.getHistoria());
+
+		PeliculaForPersonajeResDTO peliculaForPersonajeResDTO = new PeliculaForPersonajeResDTO();
+
+		List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
+
+		for (int i = 0; i < personaje.getPeliculas().size(); i++) {
+			peliculaForPersonajeResDTO.setTitulo(personaje.getPeliculas().get(i).getTitulo());
+			peliculaForPersonajeResDTO.setFechaCreacion(personaje.getPeliculas().get(i).getFechaCreacion());
+			peliculaForPersonajeResDTO.setCalificacion(personaje.getPeliculas().get(i).getCalificacion());
+			peliculaForPersonajeResDTO.setGenero(personaje.getPeliculas().get(i).getGenero().getNombre());
+			peliculas.add(peliculaForPersonajeResDTO);
+		}
+
+		personajeResDTO.setPeliculas(peliculas);
+		return new ResponseEntity(personajeResDTO, HttpStatus.OK);
 	}
 	
 	@GetMapping("/detailage/{edad}")
@@ -89,57 +105,57 @@ public class PersonajeController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody PersonajeDTO personajeDTO){
+	public ResponseEntity<?> create(@RequestBody PersonajeReqDTO personajeReqDTO){
 		// Valido si se ingresa un Nombre
-		if(StringUtils.isBlank(personajeDTO.getNombre()))
+		if(StringUtils.isBlank(personajeReqDTO.getNombre()))
 			return new ResponseEntity(new Mensaje("El Nombre es obligatorio"), HttpStatus.BAD_REQUEST);
 		
 		// Valido que no se repita el Nombre
-		if(personajeService.existsByNombre(personajeDTO.getNombre()))
+		if(personajeService.existsByNombre(personajeReqDTO.getNombre()))
 			return new ResponseEntity(new Mensaje("El Personaje ya existe"), HttpStatus.BAD_REQUEST);
 		
 		// Valido que la edad sea positiva
-				if(personajeDTO.getEdad()<0) 
+				if(personajeReqDTO.getEdad()<0)
 					return new ResponseEntity(new Mensaje("La Edad no puede ser menor a 0"), HttpStatus.BAD_REQUEST);
 		
 		// Valido que el peso sea positivo
-		if(personajeDTO.getPeso()<0) 
+		if(personajeReqDTO.getPeso()<0)
 			return new ResponseEntity(new Mensaje("El Peso no puede ser menor a 0"), HttpStatus.BAD_REQUEST);
 		
-		Personaje personaje = Personaje.builder().nombre(personajeDTO.getNombre()).edad(personajeDTO.getEdad()).peso(personajeDTO.getPeso()).
-				historia(personajeDTO.getHistoria()).build();
+		Personaje personaje = Personaje.builder().nombre(personajeReqDTO.getNombre()).edad(personajeReqDTO.getEdad()).peso(personajeReqDTO.getPeso()).
+				historia(personajeReqDTO.getHistoria()).build();
 		personajeService.save(personaje);
 		return new ResponseEntity(new Mensaje("Personaje creado"), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PersonajeDTO personajeDTO){
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PersonajeReqDTO personajeReqDTO){
 		// Valido existencia del personaje a actualizar
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		
 		 //Valido que el nombre actualizado no se repita con otro existente
-		if(personajeService.existsByNombre(personajeDTO.getNombre()) && personajeService.getByNombre(personajeDTO.getNombre()).get().getId() != id)
+		if(personajeService.existsByNombre(personajeReqDTO.getNombre()) && personajeService.getByNombre(personajeReqDTO.getNombre()).get().getId() != id)
 			return new ResponseEntity(new Mensaje("El Nombre ya existe"), HttpStatus.BAD_REQUEST);
 		
 		// Valido que el titulo no sea vacio
-		if(StringUtils.isBlank(personajeDTO.getNombre()))
+		if(StringUtils.isBlank(personajeReqDTO.getNombre()))
 			return new ResponseEntity(new Mensaje("El Titulo es obligatorio"), HttpStatus.BAD_REQUEST);
 		
 		// Valido que la edad sea positiva
-		if(personajeDTO.getEdad()<0) 
+		if(personajeReqDTO.getEdad()<0)
 			return new ResponseEntity(new Mensaje("La Edad no puede ser menor a 0"), HttpStatus.BAD_REQUEST);
 
 		// Valido que el peso sea positivo
-		if(personajeDTO.getPeso()<0) 
+		if(personajeReqDTO.getPeso()<0)
 			return new ResponseEntity(new Mensaje("El Peso no puede ser menor a 0"), HttpStatus.BAD_REQUEST);
 		
 		Personaje personaje = personajeService.getOne(id).get();
-		personaje.setNombre(personajeDTO.getNombre());
-		personaje.setEdad(personajeDTO.getEdad());
-		personaje.setPeso(personajeDTO.getPeso());
-		personaje.setHistoria(personajeDTO.getHistoria());
-		//personaje.setPeliculas(personajeDTO.getPeliculas());
+		personaje.setNombre(personajeReqDTO.getNombre());
+		personaje.setEdad(personajeReqDTO.getEdad());
+		personaje.setPeso(personajeReqDTO.getPeso());
+		personaje.setHistoria(personajeReqDTO.getHistoria());
+		personaje.setPeliculas(personajeReqDTO.getPeliculas());
 		personajeService.save(personaje);
 		return new ResponseEntity(new Mensaje("Personaje actualizado"), HttpStatus.OK);
 	}
