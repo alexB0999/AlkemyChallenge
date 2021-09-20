@@ -32,7 +32,6 @@ import lombok.ToString.Exclude;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
-@ToString
 @Builder
 public class Pelicula extends BaseEntity{
 	

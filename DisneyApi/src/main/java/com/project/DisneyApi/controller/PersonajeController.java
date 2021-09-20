@@ -1,7 +1,10 @@
 package com.project.DisneyApi.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.project.DisneyApi.dto.ListPersonajesDTO;
+import com.project.DisneyApi.dto.PeliculaForPersonajeDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,15 +35,41 @@ public class PersonajeController {
 	@GetMapping("/lista")
 	public ResponseEntity<List<Personaje>> list(){
 		List<Personaje> list = personajeService.list();
-		return new ResponseEntity(list, HttpStatus.OK);
+		ListPersonajesDTO personajeDTO = new ListPersonajesDTO();
+		List<ListPersonajesDTO>personajes = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			personajeDTO.setNombre(list.get(i).getNombre());
+			personajes.add(personajeDTO);
+		}
+		return new ResponseEntity(personajes, HttpStatus.OK);
 	}
 	
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<Personaje> getById(@PathVariable("id") Long id){
+	public ResponseEntity<PersonajeDTO> getById(@PathVariable("id") Long id){
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
 		Personaje personaje = personajeService.getOne(id).get();
-		return new ResponseEntity(personaje, HttpStatus.OK);
+
+		PersonajeDTO personajeDTO = new PersonajeDTO();
+		personajeDTO.setNombre(personaje.getNombre());
+		personajeDTO.setEdad(personaje.getEdad());
+		personajeDTO.setPeso(personaje.getPeso());
+		personajeDTO.setHistoria(personaje.getHistoria());
+
+		PeliculaForPersonajeDTO peliculaForPersonajeDTO = new PeliculaForPersonajeDTO();
+
+		List<PeliculaForPersonajeDTO>peliculas = new ArrayList<>();
+
+		for (int i = 0; i < personaje.getPeliculas().size(); i++) {
+			peliculaForPersonajeDTO.setTitulo(personaje.getPeliculas().get(i).getTitulo());
+			peliculaForPersonajeDTO.setFechaCreacion(personaje.getPeliculas().get(i).getFechaCreacion());
+			peliculaForPersonajeDTO.setCalificacion(personaje.getPeliculas().get(i).getCalificacion());
+			peliculaForPersonajeDTO.setGenero(personaje.getPeliculas().get(i).getGenero().getNombre());
+			peliculas.add(peliculaForPersonajeDTO);
+		}
+
+		personajeDTO.setPeliculas(peliculas);
+		return new ResponseEntity(personajeDTO, HttpStatus.OK);
 	}
 	
 	@GetMapping("/detailname/{nombre}")
@@ -110,7 +139,7 @@ public class PersonajeController {
 		personaje.setEdad(personajeDTO.getEdad());
 		personaje.setPeso(personajeDTO.getPeso());
 		personaje.setHistoria(personajeDTO.getHistoria());
-		personaje.setPeliculas(personajeDTO.getPeliculas());
+		//personaje.setPeliculas(personajeDTO.getPeliculas());
 		personajeService.save(personaje);
 		return new ResponseEntity(new Mensaje("Personaje actualizado"), HttpStatus.OK);
 	}

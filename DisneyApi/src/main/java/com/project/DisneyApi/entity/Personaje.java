@@ -20,7 +20,6 @@ import lombok.ToString;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
-@ToString
 @Builder
 public class Personaje extends BaseEntity{
 	

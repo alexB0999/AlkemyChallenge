@@ -11,8 +11,13 @@ import javax.validation.constraints.NotBlank;
 import com.project.DisneyApi.entity.Genero;
 import com.project.DisneyApi.entity.Personaje;
 
-import lombok.NonNull;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+//@RequiredArgsConstructor
+@Data
+@Builder
 public class PeliculaDTO {
 	
 	@NotBlank
@@ -31,57 +36,5 @@ public class PeliculaDTO {
 	private Genero genero;
 	
 	private List<Personaje>personajes = new ArrayList<Personaje>();
-
-	public PeliculaDTO() {
-		super();
-	}
-
-	public PeliculaDTO(@NotBlank @NonNull String titulo, @NotBlank @NonNull Date fechaCreacion,
-			@Min(1) @Max(5) @NotBlank int calificacion) {
-		super();
-		this.titulo = titulo;
-		this.fechaCreacion = fechaCreacion;
-		this.calificacion = calificacion;
-	}
-
-	public String getTitulo() {
-		return titulo;
-	}
-
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
-	public Date getFechaCreacion() {
-		return fechaCreacion;
-	}
-
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-	public int getCalificacion() {
-		return calificacion;
-	}
-
-	public void setCalificacion(int calificacion) {
-		this.calificacion = calificacion;
-	}
-
-	public Genero getGenero() {
-		return genero;
-	}
-
-	public void setGenero(Genero genero) {
-		this.genero = genero;
-	}
-
-	public List<Personaje> getPersonajes() {
-		return personajes;
-	}
-
-	public void setPersonajes(List<Personaje> personajes) {
-		this.personajes = personajes;
-	}
 	
 }

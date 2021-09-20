@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @AllArgsConstructor
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Mensaje {
-	
-	private String mensaje;
-	
+public class ListPersonajesDTO {
+
+    @NotBlank
+    private String nombre;
 }
