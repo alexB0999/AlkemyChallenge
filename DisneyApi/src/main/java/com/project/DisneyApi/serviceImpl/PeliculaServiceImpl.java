@@ -1,8 +1,9 @@
-package com.project.DisneyApi.service;
+package com.project.DisneyApi.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
 
+import com.project.DisneyApi.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import com.project.DisneyApi.repository.BaseRepository;
 import com.project.DisneyApi.repository.PeliculaRepository;
 
 @Service
-public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> implements PeliculaService{
+public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> implements PeliculaService {
 	
 	@Autowired
 	PeliculaRepository peliculaRepository;

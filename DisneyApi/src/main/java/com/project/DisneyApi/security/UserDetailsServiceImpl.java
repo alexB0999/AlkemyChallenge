@@ -1,9 +1,8 @@
-package com.project.DisneyApi.service;
+package com.project.DisneyApi.security;
 
 import com.project.DisneyApi.entity.Usuario;
 import com.project.DisneyApi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,25 +10,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
-public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, Long> implements UsuarioService, UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByUsername(username);
+        User.UserBuilder builder = null;
 
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority("ADMIN"));
+        if(usuario != null){
+            builder = User.withUsername(username);
+            builder.disabled(false);
+            builder.password(usuario.getPassword());
+            builder.authorities(new SimpleGrantedAuthority("ROLE_USER"));
 
-        UserDetails userDetails = new User(usuario.getUsername(), usuario.getPassword(), roles);
-
-        return userDetails;
-
+        }else{
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+        return builder.build();
     }
 }

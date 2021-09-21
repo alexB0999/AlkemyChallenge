@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.DisneyApi.entity.Personaje;
-import com.project.DisneyApi.service.PersonajeServiceImpl;
+import com.project.DisneyApi.serviceImpl.PersonajeServiceImpl;
 
 @RestController
 @RequestMapping("/characters")

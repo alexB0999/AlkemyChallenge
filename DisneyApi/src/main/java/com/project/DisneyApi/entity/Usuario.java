@@ -13,9 +13,11 @@ import javax.persistence.Entity;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Usuario extends BaseEntity{
+public class Usuario extends BaseEntity {
 
     private String username;
 
     private String password;
+
+    private String email;
 }
