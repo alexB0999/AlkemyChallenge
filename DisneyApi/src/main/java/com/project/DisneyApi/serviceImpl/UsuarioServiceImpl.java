@@ -1,4 +1,4 @@
-package com.project.DisneyApi.serviceImpl;
+/*package com.project.DisneyApi.serviceImpl;
 
 import com.project.DisneyApi.entity.Usuario;
 import com.project.DisneyApi.repository.UsuarioRepository;
@@ -26,4 +26,4 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, Long> implement
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.project.DisneyApi.controller;
+/*package com.project.DisneyApi.controller;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,4 +12,4 @@ public class PublicController {
     public String index(){
         return "logout";
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.project.DisneyApi.controller;
+/*package com.project.DisneyApi.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,4 +10,4 @@ public class InicioController {
     public String inicio(){
         return "inicio";
     }
-}
+}*/

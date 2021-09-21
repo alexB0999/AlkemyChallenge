@@ -1,4 +1,4 @@
-package com.project.DisneyApi.controller;
+/*package com.project.DisneyApi.controller;
 
 import com.project.DisneyApi.entity.Usuario;
 import com.project.DisneyApi.serviceImpl.UsuarioServiceImpl;
@@ -40,4 +40,4 @@ public class LoginController {
         }
         return "redirect:/auth/login";
     }
-}
+}*/
