@@ -20,7 +20,33 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
 	public PersonajeServiceImpl(BaseRepository<Personaje, Long> baseRepository) {
         super(baseRepository);
     }
-	
+
+	@Override
+	public List<Personaje> searchNombre(String name) throws Exception {
+		try {
+
+			List<Personaje> personajes = personajeRepository.searchNombre(name);
+
+			return personajes;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
+	@Override
+	public List<Personaje> searchEdad(String age) throws Exception {
+		try {
+
+			List<Personaje> personajes = personajeRepository.searchEdad(age);
+
+			return personajes;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
+
+
 	public List<Personaje> list(){
 		return personajeRepository.findAll();
 	}

@@ -14,6 +14,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class ListPersonajesDTO {
 
-    @NotBlank
+    //@NotBlank
     private String nombre;
 }
