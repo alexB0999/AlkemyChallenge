@@ -3,6 +3,7 @@ package com.project.DisneyApi.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
+import com.project.DisneyApi.entity.Personaje;
 import com.project.DisneyApi.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,18 @@ public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> impleme
 	
 	@Autowired
 	PeliculaRepository peliculaRepository;
+
+	@Override
+	public List<Pelicula> search(String name) throws Exception {
+		try {
+
+			List<Pelicula> peliculas = peliculaRepository.search(name);
+
+			return peliculas;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
 	
 	public PeliculaServiceImpl(BaseRepository<Pelicula, Long> baseRepository) {
         super(baseRepository);

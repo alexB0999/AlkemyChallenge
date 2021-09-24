@@ -22,30 +22,16 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
     }
 
 	@Override
-	public List<Personaje> searchNombre(String name) throws Exception {
+	public List<Personaje> search(String name, Integer age) throws Exception {
 		try {
 
-			List<Personaje> personajes = personajeRepository.searchNombre(name);
+			List<Personaje> personajes = personajeRepository.search(name, age);
 
 			return personajes;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
 	}
-
-	@Override
-	public List<Personaje> searchEdad(String age) throws Exception {
-		try {
-
-			List<Personaje> personajes = personajeRepository.searchEdad(age);
-
-			return personajes;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-	}
-
-
 
 	public List<Personaje> list(){
 		return personajeRepository.findAll();
@@ -53,14 +39,6 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
 	
 	public Optional<Personaje> getOne(Long id){
 		return personajeRepository.findById(id);
-	}
-	
-	public Optional<Personaje> getByNombre(String nombre){
-		return personajeRepository.findByNombre(nombre);
-	}
-	
-	public List <Personaje> getByEdad(int edad){
-		return personajeRepository.findByEdad(edad);
 	}
 	
 	public void save (Personaje personaje) {
@@ -74,13 +52,21 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
 	public boolean existsById (Long id) {
 		return personajeRepository.existsById(id);
 	}
+
+	public Optional<Personaje> getByNombre(String nombre){
+		return personajeRepository.findByNombre(nombre);
+	}
 	
 	public boolean existsByNombre (String nombre) {
 		return personajeRepository.existsByNombre(nombre);
 	}
-	
+
+	/*public List <Personaje> getByEdad(int edad){
+		return personajeRepository.findByEdad(edad);
+	}
+
 	public boolean existsByEdad(int edad) {
 		return personajeRepository.existsByEdad(edad);
-	}
+	}*/
 	
 }
