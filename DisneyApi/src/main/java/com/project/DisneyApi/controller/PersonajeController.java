@@ -2,6 +2,7 @@ package com.project.DisneyApi.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.LongAccumulator;
 
 import com.project.DisneyApi.dto.*;
 import org.apache.commons.lang3.StringUtils;
@@ -22,8 +23,9 @@ public class PersonajeController {
 	PersonajeServiceImpl personajeService;
 
 	@GetMapping("")
-	public ResponseEntity<?> search(@RequestParam String name, @RequestParam String age) {
+	public ResponseEntity<?> search(@RequestParam String name, String age, String movie) {
 		Integer edad = 0;
+		Long idPelicula = Long.valueOf(0);
 		try
 		{
 			if(age != null)
@@ -33,8 +35,22 @@ public class PersonajeController {
 		{
 			edad = 0;
 		}
+		try
+		{
+			if(movie != null)
+				idPelicula = Long.parseLong(movie);
+		}
+		catch (NumberFormatException e)
+		{
+			idPelicula = Long.valueOf(0);
+		}
 		try {
-			List<Personaje> list = personajeService.search(name, edad);
+			List<Personaje> list = personajeService.search(name, edad, idPelicula);
+
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i).getNombre());
+			}
+
 			List<PersonajeResDTO>personajes = new ArrayList<>();
 
 

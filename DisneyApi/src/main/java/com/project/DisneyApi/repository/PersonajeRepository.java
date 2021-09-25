@@ -15,7 +15,10 @@ public interface PersonajeRepository extends BaseRepository<Personaje, Long>{
 	Optional<Personaje>findByNombre(String nombre);
 	boolean existsByNombre(String nombre);
 
-	@Query(value = "SELECT p FROM Personaje p WHERE (p.nombre LIKE %:name% AND p.edad = :age) OR (p.nombre LIKE %:name% OR p.edad = :age)",nativeQuery = false)
-	List<Personaje> search(@Param("name") String filtro, @Param("age") int filtro2);
-	
+	@Query(value = "SELECT DISTINCT * FROM Personaje c JOIN personaje_pelicula pp ON c.id = pp.personaje_id " +
+			"JOIN pelicula m ON pp.pelicula_id = m.id " +
+			"WHERE (c.nombre LIKE %:name% AND c.edad = :age AND m.id = :id) " +
+			"OR (c.nombre LIKE %:name% OR c.edad = :age OR m.id = :id)" +
+			"GROUP BY c.nombre",nativeQuery = true)
+	List<Personaje> search(@Param("name") String name, @Param("age") int age, @Param("id") Long id);
 }

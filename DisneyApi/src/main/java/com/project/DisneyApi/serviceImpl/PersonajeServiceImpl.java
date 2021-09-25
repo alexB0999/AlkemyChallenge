@@ -22,10 +22,10 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
     }
 
 	@Override
-	public List<Personaje> search(String name, Integer age) throws Exception {
+	public List<Personaje> search(String name, Integer age, Long id) throws Exception {
 		try {
 
-			List<Personaje> personajes = personajeRepository.search(name, age);
+			List<Personaje> personajes = personajeRepository.search(name, age, id);
 
 			return personajes;
 		} catch (Exception e) {

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PersonajeService extends BaseService<Personaje, Long>{
 
-    List<Personaje> search(String name, Integer age) throws Exception;
+    List<Personaje> search(String name, Integer age, Long id) throws Exception;
 
 }
