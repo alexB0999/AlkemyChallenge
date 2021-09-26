@@ -28,55 +28,51 @@ public class PersonajeController {
 		Long idPelicula = Long.valueOf(0);
 		try
 		{
-			if(age != null)
+			if(!age.equals(null)){
 				edad = Integer.parseInt(age);
+			}
 		}
 		catch (NumberFormatException e)
 		{
 			edad = 0;
 		}
-		try
-		{
-			if(movie != null)
+
+		try{
+			if(!movie.equals(null)){
 				idPelicula = Long.parseLong(movie);
-		}
-		catch (NumberFormatException e)
-		{
+			}
+		}catch (NumberFormatException e){
 			idPelicula = Long.valueOf(0);
 		}
-		try {
-			List<Personaje> list = personajeService.search(name, edad, idPelicula);
 
-			for (int i = 0; i < list.size(); i++) {
-				System.out.println(list.get(i).getNombre());
-			}
+			try {
+				List<Personaje> list = personajeService.search(name, edad, idPelicula);
 
-			List<PersonajeResDTO>personajes = new ArrayList<>();
+				List<PersonajeResDTO>personajes = new ArrayList<>();
 
+				for (int i = 0; i < list.size(); i++) {
 
-			for (int i = 0; i < list.size(); i++) {
+					List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
 
-				List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
+					for (int j = 0; j < list.get(i).getPeliculas().size(); j++) {
+						peliculas.add(PeliculaForPersonajeResDTO.builder().
+								titulo(list.get(i).getPeliculas().get(j).getTitulo()).
+								fechaCreacion(list.get(i).getPeliculas().get(j).getFechaCreacion()).
+								calificacion(list.get(i).getPeliculas().get(j).getCalificacion()).
+								genero(list.get(i).getPeliculas().get(j).getGenero().getNombre()).build());
+					}
 
-				for (int j = 0; j < list.get(i).getPeliculas().size(); j++) {
-					peliculas.add(PeliculaForPersonajeResDTO.builder().
-							titulo(list.get(i).getPeliculas().get(j).getTitulo()).
-							fechaCreacion(list.get(i).getPeliculas().get(j).getFechaCreacion()).
-							calificacion(list.get(i).getPeliculas().get(j).getCalificacion()).
-							genero(list.get(i).getPeliculas().get(j).getGenero().getNombre()).build());
+					personajes.add(PersonajeResDTO.builder().
+							nombre(list.get(i).getNombre()).
+							edad(list.get(i).getEdad()).
+							peso(list.get(i).getPeso()).
+							historia(list.get(i).getHistoria()).peliculas(peliculas).build());
 				}
 
-				personajes.add(PersonajeResDTO.builder().
-						nombre(list.get(i).getNombre()).
-						edad(list.get(i).getEdad()).
-						peso(list.get(i).getPeso()).
-						historia(list.get(i).getHistoria()).peliculas(peliculas).build());
+				return new ResponseEntity(personajes, HttpStatus.OK);
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(("{\"error\": \"" + e.getMessage() + "\"}"));
 			}
-
-			return new ResponseEntity(personajes, HttpStatus.OK);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(("{\"error\": \"" + e.getMessage() + "\"}"));
-		}
 	}
 	
 	@GetMapping("/list")

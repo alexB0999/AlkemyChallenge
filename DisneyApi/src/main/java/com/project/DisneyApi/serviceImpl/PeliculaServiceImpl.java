@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.project.DisneyApi.entity.Personaje;
 import com.project.DisneyApi.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.project.DisneyApi.entity.Pelicula;
@@ -19,10 +20,10 @@ public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> impleme
 	PeliculaRepository peliculaRepository;
 
 	@Override
-	public List<Pelicula> search(String name) throws Exception {
+	public List<Pelicula> search(String name, Long id, String sort) throws Exception {
 		try {
 
-			List<Pelicula> peliculas = peliculaRepository.search(name);
+			List<Pelicula> peliculas = peliculaRepository.search(name, id, Sort.by(sort));
 
 			return peliculas;
 		} catch (Exception e) {

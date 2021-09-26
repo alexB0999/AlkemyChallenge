@@ -22,9 +22,17 @@ public class PeliculaController {
 	PeliculaServiceImpl peliculaService;
 
 	@GetMapping("")
-	public ResponseEntity<?> search(@RequestParam String name) {
+	public ResponseEntity<?> search(@RequestParam String name, String genre, String order) {
+		Long idGenero = Long.valueOf(0);
+		try{
+			if(!genre.equals(null)){
+				idGenero = Long.parseLong(genre);
+			}
+		}catch (NumberFormatException e){
+			idGenero = Long.valueOf(0);
+		}
 		try {
-			List<Pelicula> list = peliculaService.search(name);
+			List<Pelicula> list = peliculaService.search(name, idGenero, order);
 			List<PeliculaResDTO>peliculas = new ArrayList<>();
 
 			for (int i = 0; i < list.size(); i++) {

@@ -33,6 +33,18 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
 		}
 	}
 
+	/*@Override
+	public List<Personaje> searchBy(String name, Integer age) throws Exception {
+		try {
+
+			List<Personaje> personajes = personajeRepository.searchBy(name, age);
+
+			return personajes;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}*/
+
 	public List<Personaje> list(){
 		return personajeRepository.findAll();
 	}
