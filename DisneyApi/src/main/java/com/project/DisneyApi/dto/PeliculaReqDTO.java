@@ -16,7 +16,7 @@ import java.util.List;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class PeliculaReqDTO {
+public class PeliculaReqDTO extends BaseDTO{
 
     @NotBlank
     @NonNull

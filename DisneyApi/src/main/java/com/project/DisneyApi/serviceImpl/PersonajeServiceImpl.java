@@ -32,34 +32,6 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
 			throw new Exception(e.getMessage());
 		}
 	}
-
-	/*@Override
-	public List<Personaje> searchBy(String name, Integer age) throws Exception {
-		try {
-
-			List<Personaje> personajes = personajeRepository.searchBy(name, age);
-
-			return personajes;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-	}*/
-
-	public List<Personaje> list(){
-		return personajeRepository.findAll();
-	}
-	
-	public Optional<Personaje> getOne(Long id){
-		return personajeRepository.findById(id);
-	}
-	
-	public void save (Personaje personaje) {
-		personajeRepository.save(personaje);
-	}
-	
-	public void delete (Long id) {
-		personajeRepository.deleteById(id);
-	}
 	
 	public boolean existsById (Long id) {
 		return personajeRepository.existsById(id);
@@ -72,13 +44,5 @@ public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> imple
 	public boolean existsByNombre (String nombre) {
 		return personajeRepository.existsByNombre(nombre);
 	}
-
-	/*public List <Personaje> getByEdad(int edad){
-		return personajeRepository.findByEdad(edad);
-	}
-
-	public boolean existsByEdad(int edad) {
-		return personajeRepository.existsByEdad(edad);
-	}*/
 	
 }

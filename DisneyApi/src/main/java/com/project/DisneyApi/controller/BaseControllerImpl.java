@@ -1,5 +1,7 @@
 package com.project.DisneyApi.controller;
 
+import com.project.DisneyApi.dto.BaseDTO;
+import com.project.DisneyApi.dto.Mapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -16,9 +18,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-public abstract class BaseControllerImpl <E extends BaseEntity, S extends BaseServiceImpl<E, Long>> implements BaseController<E, Long>{
-	
-	@Autowired
+public abstract class BaseControllerImpl <DTO extends BaseDTO, E extends BaseEntity, S extends BaseServiceImpl<E, Long>> implements BaseController<DTO, E, Long> {
+
+	E entity;
+
+    @Autowired
     protected S servicio;
 
     @Operation(summary = "Este metodo devuelve una lista de objetos")
@@ -30,7 +34,7 @@ public abstract class BaseControllerImpl <E extends BaseEntity, S extends BaseSe
                     description = "el controlador no se encuentra, o no es posible comunicarse con la base de datos",
                     content = @Content)})
     @GetMapping("")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<?> getAll() throws Exception {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.FindAll());
         } catch (Exception excep) {
@@ -57,7 +61,7 @@ public abstract class BaseControllerImpl <E extends BaseEntity, S extends BaseSe
 
     })
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable Long id) {
+    public ResponseEntity<?> getOne(@PathVariable Long id) throws Exception {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.FindById(id));
         } catch (Exception excep) {
@@ -78,9 +82,10 @@ public abstract class BaseControllerImpl <E extends BaseEntity, S extends BaseSe
     })
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody E entity) {
+    public ResponseEntity<?> save(@RequestBody DTO dto) throws Exception {
+        E entidad = Mapper.MapperDTOToEntity(dto, this.entity);
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.Save(entity));
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.Save(entidad));
         } catch (Exception excep) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente mas tarde.\"}");
         }
@@ -97,9 +102,10 @@ public abstract class BaseControllerImpl <E extends BaseEntity, S extends BaseSe
 
     })
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody E entity) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DTO dto) throws Exception {
+        E entidad = Mapper.MapperDTOToEntity(dto, this.entity);
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.Update(id, entity));
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.Update(id, entidad));
         } catch (Exception excep) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente mas tarde.\"}");
         }
@@ -116,7 +122,7 @@ public abstract class BaseControllerImpl <E extends BaseEntity, S extends BaseSe
 
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(servicio.Delete(id));
         } catch (Exception excep) {

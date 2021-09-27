@@ -8,6 +8,4 @@ public interface PersonajeService extends BaseService<Personaje, Long>{
 
     List<Personaje> search(String name, Integer age, Long id) throws Exception;
 
-    /*List<Personaje> searchBy(String name, Integer age) throws Exception;*/
-
 }

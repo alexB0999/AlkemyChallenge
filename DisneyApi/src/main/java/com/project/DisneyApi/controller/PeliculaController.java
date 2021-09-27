@@ -16,7 +16,7 @@ import com.project.DisneyApi.serviceImpl.PeliculaServiceImpl;
 @RestController
 @RequestMapping("/movies")
 @CrossOrigin(origins = "http://localhost:4200")
-public class PeliculaController {
+public class PeliculaController extends BaseControllerImpl<PeliculaReqDTO, Pelicula, PeliculaServiceImpl>{
 	
 	@Autowired
 	PeliculaServiceImpl peliculaService;
@@ -58,8 +58,8 @@ public class PeliculaController {
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<List<Pelicula>> list(){
-		List<Pelicula> list = peliculaService.list();
+	public ResponseEntity<List<Pelicula>> getAll() throws Exception {
+		List<Pelicula> list = peliculaService.FindAll();
 		List<ListPeliculasDTO>peliculas = new ArrayList<>();
 
 		for (int i = 0; i < list.size(); i++) {
@@ -71,10 +71,10 @@ public class PeliculaController {
 	}
 	
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<Pelicula> getById(@PathVariable("id") Long id){
+	public ResponseEntity<Pelicula> getOne(@PathVariable("id") Long id) throws Exception {
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		Pelicula pelicula = peliculaService.getOne(id).get();
+		Pelicula pelicula = peliculaService.FindById(id);
 		List<PersonajeForPeliculaResDTO>personajes = new ArrayList<>();
 
 		for (int i = 0; i < pelicula.getPersonajes().size(); i++) {
@@ -94,32 +94,8 @@ public class PeliculaController {
 		return new ResponseEntity(peliculaResDTO, HttpStatus.OK);
 	}
 	
-	/*@GetMapping("/detailname/{nombre}")
-	public ResponseEntity<Pelicula> getByNombre(@PathVariable("nombre") String nombre){
-		if(!peliculaService.existsByTitulo(nombre)) 
-			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		Pelicula pelicula = peliculaService.getByTitulo(nombre).get();
-		List<PersonajeForPeliculaResDTO>personajes = new ArrayList<>();
-
-		for (int i = 0; i < pelicula.getPersonajes().size(); i++) {
-			personajes.add(PersonajeForPeliculaResDTO.builder().
-					nombre(pelicula.getPersonajes().get(i).getNombre()).
-					edad(pelicula.getPersonajes().get(i).getEdad()).
-					peso(pelicula.getPersonajes().get(i).getEdad()).
-					historia(pelicula.getPersonajes().get(i).getHistoria()).build());
-		}
-		PeliculaResDTO peliculaResDTO = PeliculaResDTO.builder().
-				titulo(pelicula.getTitulo()).
-				fechaCreacion(pelicula.getFechaCreacion()).
-				calificacion(pelicula.getCalificacion()).
-				genero(pelicula.getGenero().getNombre()).
-				personajes(personajes).build();
-
-		return new ResponseEntity(peliculaResDTO, HttpStatus.OK);
-	}*/
-	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody PeliculaReqDTO peliculaReqDTO){
+	public ResponseEntity<?> create(@RequestBody PeliculaReqDTO peliculaReqDTO) throws Exception {
 		// Valido si se ingresa un titulo
 		if(StringUtils.isBlank(peliculaReqDTO.getTitulo()))
 			return new ResponseEntity(new Mensaje("El Titulo es obligatorio"), HttpStatus.BAD_REQUEST);
@@ -132,14 +108,14 @@ public class PeliculaController {
 		// Valido que la calificacion sea entre 1 y 5
 		if((peliculaReqDTO.getCalificacion()<1) || (peliculaReqDTO.getCalificacion()>5))
 			return new ResponseEntity(new Mensaje("La calificacion debe ser entre 1 y 5"), HttpStatus.BAD_REQUEST);
-		Pelicula pelicula = Pelicula.builder().titulo(peliculaReqDTO.getTitulo()).fechaCreacion(peliculaReqDTO.getFechaCreacion()).
-				calificacion(peliculaReqDTO.getCalificacion()).build();
-		peliculaService.save(pelicula);
+
+		Pelicula pelicula = Mapper.MapperDTOToEntity(peliculaReqDTO, Pelicula.builder().build());
+		peliculaService.Save(pelicula);
 		return new ResponseEntity(new Mensaje("Pelicula creada"), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PeliculaReqDTO peliculaReqDTO){
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PeliculaReqDTO peliculaReqDTO) throws Exception {
 		// Valido existencia de la pelicula a actualizar
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
@@ -156,24 +132,23 @@ public class PeliculaController {
 		if((peliculaReqDTO.getCalificacion()<1) || (peliculaReqDTO.getCalificacion()>5))
 			return new ResponseEntity(new Mensaje("La calificacion debe ser entre 1 y 5"), HttpStatus.BAD_REQUEST);
 
-		Pelicula pelicula = peliculaService.getOne(id).get();
+		Pelicula pelicula = peliculaService.FindById(id);
 		pelicula.setTitulo(peliculaReqDTO.getTitulo());
 		pelicula.setFechaCreacion(peliculaReqDTO.getFechaCreacion());
 		pelicula.setCalificacion(peliculaReqDTO.getCalificacion());
 		pelicula.setGenero(peliculaReqDTO.getGenero());
 		pelicula.setPersonajes(peliculaReqDTO.getPersonajes());
 
-		peliculaService.save(pelicula);
+		peliculaService.Update(id, pelicula);
 		return new ResponseEntity(new Mensaje("Pelicula actualizada"), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id){
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) throws Exception {
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		peliculaService.delete(id);
+		peliculaService.Delete(id);
 		return new ResponseEntity(new Mensaje("Pelicula eliminada"), HttpStatus.OK);
 	}
-	
 
 }

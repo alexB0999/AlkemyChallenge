@@ -2,7 +2,6 @@ package com.project.DisneyApi.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.LongAccumulator;
 
 import com.project.DisneyApi.dto.*;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +16,7 @@ import com.project.DisneyApi.serviceImpl.PersonajeServiceImpl;
 @RestController
 @RequestMapping("/characters")
 @CrossOrigin(origins = "http://localhost:4200")
-public class PersonajeController {
+public class PersonajeController extends BaseControllerImpl<PersonajeReqDTO, Personaje, PersonajeServiceImpl>{
 	
 	@Autowired
 	PersonajeServiceImpl personajeService;
@@ -76,8 +75,8 @@ public class PersonajeController {
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<List<Personaje>> list(){
-		List<Personaje> list = personajeService.list();
+	public ResponseEntity<List<Personaje>> getAll() throws Exception {
+		List<Personaje> list = personajeService.FindAll();
 		List<ListPersonajesDTO>personajes = new ArrayList<>();
 
 		for (int i = 0; i < list.size(); i++) {
@@ -87,10 +86,11 @@ public class PersonajeController {
 	}
 	
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<PersonajeResDTO> getById(@PathVariable("id") Long id){
+	public ResponseEntity<PersonajeResDTO> getOne(@PathVariable("id") Long id) throws Exception {
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		Personaje personaje = personajeService.getOne(id).get();
+		Personaje personaje = personajeService.FindById(id);
+
 		List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
 
 		for (int i = 0; i < personaje.getPeliculas().size(); i++) {
@@ -110,43 +110,8 @@ public class PersonajeController {
 		return new ResponseEntity(personajeResDTO, HttpStatus.OK);
 	}
 	
-	/*@GetMapping("/detailname/{nombre}")
-	public ResponseEntity<Personaje> getByNombre(@PathVariable("nombre") String nombre){
-		if(!personajeService.existsByNombre(nombre)) 
-			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		Personaje personaje = personajeService.getByNombre(nombre).get();
-		PersonajeResDTO personajeResDTO = new PersonajeResDTO();
-		personajeResDTO.setNombre(personaje.getNombre());
-		personajeResDTO.setEdad(personaje.getEdad());
-		personajeResDTO.setPeso(personaje.getPeso());
-		personajeResDTO.setHistoria(personaje.getHistoria());
-
-		PeliculaForPersonajeResDTO peliculaForPersonajeResDTO = new PeliculaForPersonajeResDTO();
-
-		List<PeliculaForPersonajeResDTO>peliculas = new ArrayList<>();
-
-		for (int i = 0; i < personaje.getPeliculas().size(); i++) {
-			peliculaForPersonajeResDTO.setTitulo(personaje.getPeliculas().get(i).getTitulo());
-			peliculaForPersonajeResDTO.setFechaCreacion(personaje.getPeliculas().get(i).getFechaCreacion());
-			peliculaForPersonajeResDTO.setCalificacion(personaje.getPeliculas().get(i).getCalificacion());
-			peliculaForPersonajeResDTO.setGenero(personaje.getPeliculas().get(i).getGenero().getNombre());
-			peliculas.add(peliculaForPersonajeResDTO);
-		}
-
-		personajeResDTO.setPeliculas(peliculas);
-		return new ResponseEntity(personajeResDTO, HttpStatus.OK);
-	}
-	
-	@GetMapping("/detailage/{edad}")
-	public ResponseEntity<List<Personaje>> getByEdad(@PathVariable("edad") int edad){
-		if(!personajeService.existsByEdad(edad)) 
-			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		List<Personaje> list = personajeService.getByEdad(edad);
-		return new ResponseEntity(list, HttpStatus.OK);
-	}*/
-	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody PersonajeReqDTO personajeReqDTO){
+	public ResponseEntity<?> save(@RequestBody PersonajeReqDTO personajeReqDTO) throws Exception {
 		// Valido si se ingresa un Nombre
 		if(StringUtils.isBlank(personajeReqDTO.getNombre()))
 			return new ResponseEntity(new Mensaje("El Nombre es obligatorio"), HttpStatus.BAD_REQUEST);
@@ -162,15 +127,14 @@ public class PersonajeController {
 		// Valido que el peso sea positivo
 		if(personajeReqDTO.getPeso()<0)
 			return new ResponseEntity(new Mensaje("El Peso no puede ser menor a 0"), HttpStatus.BAD_REQUEST);
-		
-		Personaje personaje = Personaje.builder().nombre(personajeReqDTO.getNombre()).edad(personajeReqDTO.getEdad()).peso(personajeReqDTO.getPeso()).
-				historia(personajeReqDTO.getHistoria()).build();
-		personajeService.save(personaje);
+
+		Personaje personaje = Mapper.MapperDTOToEntity(personajeReqDTO, Personaje.builder().build());
+		personajeService.Save(personaje);
 		return new ResponseEntity(new Mensaje("Personaje creado"), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PersonajeReqDTO personajeReqDTO){
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PersonajeReqDTO personajeReqDTO) throws Exception {
 		// Valido existencia del personaje a actualizar
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
@@ -191,21 +155,21 @@ public class PersonajeController {
 		if(personajeReqDTO.getPeso()<0)
 			return new ResponseEntity(new Mensaje("El Peso no puede ser menor a 0"), HttpStatus.BAD_REQUEST);
 		
-		Personaje personaje = personajeService.getOne(id).get();
+		Personaje personaje = personajeService.FindById(id);
 		personaje.setNombre(personajeReqDTO.getNombre());
 		personaje.setEdad(personajeReqDTO.getEdad());
 		personaje.setPeso(personajeReqDTO.getPeso());
 		personaje.setHistoria(personajeReqDTO.getHistoria());
 		personaje.setPeliculas(personajeReqDTO.getPeliculas());
-		personajeService.save(personaje);
+		personajeService.Update(id, personaje);
 		return new ResponseEntity(new Mensaje("Personaje actualizado"), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id){
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) throws Exception {
 		if(!personajeService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);
-		personajeService.delete(id);
+		personajeService.Delete(id);
 		return new ResponseEntity(new Mensaje("Personaje eliminado"), HttpStatus.OK);
 	}
 	

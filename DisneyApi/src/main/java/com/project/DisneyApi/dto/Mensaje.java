@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Mensaje {
+public class Mensaje extends BaseDTO{
 	
 	private String mensaje;
 	

@@ -15,7 +15,7 @@ import java.util.List;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class PersonajeReqDTO {
+public class PersonajeReqDTO extends BaseDTO{
 
     @NotBlank
     private String nombre;

@@ -15,7 +15,7 @@ import lombok.*;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class PeliculaResDTO {
+public class PeliculaResDTO extends BaseDTO{
 	
 	@NotBlank
 	@NonNull

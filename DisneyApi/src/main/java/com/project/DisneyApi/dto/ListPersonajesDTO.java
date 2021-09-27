@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class ListPersonajesDTO {
+public class ListPersonajesDTO extends BaseDTO{
 
     //@NotBlank
     private String nombre;

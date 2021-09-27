@@ -46,7 +46,7 @@ public class Pelicula extends BaseEntity{
 	//@NonNull
 	private int calificacion;
 	
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "fk_genero")
 	private Genero genero;
 

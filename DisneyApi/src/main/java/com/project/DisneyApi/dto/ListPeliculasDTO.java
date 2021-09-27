@@ -12,7 +12,7 @@ import java.util.Date;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class ListPeliculasDTO {
+public class ListPeliculasDTO extends BaseDTO{
 
     private String titulo;
 

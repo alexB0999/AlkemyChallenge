@@ -18,6 +18,10 @@ public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> impleme
 	
 	@Autowired
 	PeliculaRepository peliculaRepository;
+	
+	public PeliculaServiceImpl(BaseRepository<Pelicula, Long> baseRepository) {
+        super(baseRepository);
+    }
 
 	@Override
 	public List<Pelicula> search(String name, Long id, String sort) throws Exception {
@@ -31,30 +35,10 @@ public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> impleme
 		}
 	}
 	
-	public PeliculaServiceImpl(BaseRepository<Pelicula, Long> baseRepository) {
-        super(baseRepository);
-    }
-	
-	public List<Pelicula> list(){
-		return peliculaRepository.findAll();
-	}
-	
-	public Optional<Pelicula> getOne(Long id){
-		return peliculaRepository.findById(id);
-	}
-	
 	public Optional<Pelicula> getByTitulo(String nombre){
 		return peliculaRepository.findByTitulo(nombre);
 	}
-	
-	public void save (Pelicula pelicula) {
-		peliculaRepository.save(pelicula);
-	}
-	
-	public void delete (Long id) {
-		peliculaRepository.deleteById(id);
-	}
-	
+
 	public boolean existsById (Long id) {
 		return peliculaRepository.existsById(id);
 	}
