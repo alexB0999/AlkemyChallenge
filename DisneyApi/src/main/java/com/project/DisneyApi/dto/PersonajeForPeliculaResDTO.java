@@ -5,13 +5,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @AllArgsConstructor
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Mensaje extends BaseDTO{
-	
-	private String mensaje;
-	
+public class PersonajeForPeliculaResDTO extends BaseDTO{
+
+    @NotBlank
+    private String nombre;
+
+    private int edad;
+
+    private float peso;
+
+    private String historia;
 }

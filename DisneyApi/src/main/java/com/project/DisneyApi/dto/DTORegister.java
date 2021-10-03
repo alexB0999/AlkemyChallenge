@@ -10,8 +10,14 @@ import lombok.NoArgsConstructor;
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Mensaje extends BaseDTO{
-	
-	private String mensaje;
-	
+public class DTORegister {
+
+    private String username;
+
+    private String email;
+
+    private String password;
+
+    private String role;
+
 }

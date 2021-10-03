@@ -5,13 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
 @Builder
-public class Mensaje extends BaseDTO{
-	
-	private String mensaje;
-	
+public class ListPeliculasDTO extends BaseDTO{
+
+    private String titulo;
+
+    private Date fechaCreacion;
 }

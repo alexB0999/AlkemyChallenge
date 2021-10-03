@@ -20,7 +20,6 @@ import lombok.ToString;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
-@ToString
 @Builder
 public class Personaje extends BaseEntity{
 	
@@ -36,7 +35,7 @@ public class Personaje extends BaseEntity{
 	//@NonNull
 	private String historia;
 	
-	@ManyToMany(cascade = {CascadeType.PERSIST})
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name =  "personaje_pelicula", 
 	joinColumns = @JoinColumn(name = "personaje_id"),
 	inverseJoinColumns = @JoinColumn(name = "pelicula_id"))

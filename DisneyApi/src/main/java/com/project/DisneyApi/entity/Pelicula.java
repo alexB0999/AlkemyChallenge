@@ -32,7 +32,6 @@ import lombok.ToString.Exclude;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @Data
-@ToString
 @Builder
 public class Pelicula extends BaseEntity{
 	
@@ -50,5 +49,8 @@ public class Pelicula extends BaseEntity{
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "fk_genero")
 	private Genero genero;
+
+	@ManyToMany(mappedBy = "peliculas")
+	private List<Personaje>personajes = new ArrayList<>();
 	
 }

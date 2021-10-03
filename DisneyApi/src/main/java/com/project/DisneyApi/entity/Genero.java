@@ -3,33 +3,23 @@ package com.project.DisneyApi.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Builder.Default;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString.Exclude;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Data
 @Builder
 public class Genero extends BaseEntity{
 	
-	//@NonNull
+	@NonNull
 	private String nombre;
 	
-	//No incluir bidireccinalidad hasta solucionar bucle
-	/*@OneToMany(mappedBy = "genero")
-	@Exclude
-	private List<Pelicula>peliculas = new ArrayList<Pelicula>();*/
+
+	@OneToMany(mappedBy = "genero")
+	private List<Pelicula>peliculas = new ArrayList<Pelicula>();
 }
