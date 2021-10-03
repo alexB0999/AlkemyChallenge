@@ -95,7 +95,7 @@ public class PeliculaController extends BaseControllerImpl<PeliculaReqDTO, Pelic
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody PeliculaReqDTO peliculaReqDTO) throws Exception {
+	public ResponseEntity<?> save(@RequestBody PeliculaReqDTO peliculaReqDTO) throws Exception {
 		// Valido si se ingresa un titulo
 		if(StringUtils.isBlank(peliculaReqDTO.getTitulo()))
 			return new ResponseEntity(new Mensaje("El Titulo es obligatorio"), HttpStatus.BAD_REQUEST);
