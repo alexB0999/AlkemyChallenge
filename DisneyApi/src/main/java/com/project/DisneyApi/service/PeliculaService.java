@@ -1,7 +1,6 @@
 package com.project.DisneyApi.service;
 
 import com.project.DisneyApi.entity.Pelicula;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 

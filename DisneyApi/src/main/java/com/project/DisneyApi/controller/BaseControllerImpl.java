@@ -25,6 +25,8 @@ public abstract class BaseControllerImpl <DTO extends BaseDTO, E extends BaseEnt
     @Autowired
     protected S servicio;
 
+    //Documentacion en: http://localhost:8080/swagger-ui/index.html (Puede requerir token)
+
     @Operation(summary = "Este metodo devuelve una lista de objetos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",

@@ -2,20 +2,23 @@ package com.project.DisneyApi;
 
 import com.project.DisneyApi.controller.PeliculaController;
 import com.project.DisneyApi.controller.PersonajeController;
+import com.project.DisneyApi.controller.UsuarioController;
+import com.project.DisneyApi.dto.DTORegister;
 import com.project.DisneyApi.dto.Mapper;
 import com.project.DisneyApi.dto.PeliculaReqDTO;
 import com.project.DisneyApi.dto.PersonajeReqDTO;
 import com.project.DisneyApi.entity.Genero;
-import com.project.DisneyApi.entity.Pelicula;
 import com.project.DisneyApi.entity.Personaje;
+import com.project.DisneyApi.security.AuthenticationRequest;
+import com.project.DisneyApi.security.AuthenticationResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.IOException;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,6 +31,9 @@ class DisneyApiApplicationTests {
 
 	@Autowired
 	private PersonajeController personajeController;
+
+	@Autowired
+	private UsuarioController usuarioController;
 
 	Genero genero1 = new Genero("Accion");
 	Genero genero2 = new Genero("SciFi");
@@ -125,6 +131,16 @@ class DisneyApiApplicationTests {
 	}
 
 	@Test
+	public void crearPersonaje4() throws Exception {
+		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().nombre("Personaje4").edad(15).peso(50).
+				historia("El es un joven").build();
+		ResponseEntity personajeTest = personajeController.save(personajeReqDTO);
+
+		assertTrue(personajeTest.getStatusCode().is2xxSuccessful());
+
+	}
+
+	@Test
 	public  void EntityToDTO(){
 		PersonajeReqDTO personajeReqDTO = new PersonajeReqDTO();
 		Personaje personaje =  Personaje.builder().nombre("Cooper").edad(45).peso(80).
@@ -152,15 +168,142 @@ class DisneyApiApplicationTests {
 
 	}
 
-	/*@Test
-	public void  crearUsuario(){
-		Usuario usuario = new Usuario();
-		usuario.setUsername("Alkemy");
-		usuario.setPassword(bCryptPasswordEncoder.encode("Encrypted"));
-		Usuario retorno = usuarioRepository.save(usuario);
+	@Test
+	public void  registrarUsuario() throws IOException {
+		DTORegister dtoRegister = DTORegister.builder().username("Alkemy").password("1234")
+				.email("max00m_e139b@gexik.com").role("Admin").build();
+		ResponseEntity usuarioTest = usuarioController.register(dtoRegister);
 
-		assertTrue(retorno.getPassword().equalsIgnoreCase(usuario.getPassword()));
+		assertTrue(usuarioTest.getStatusCode().is2xxSuccessful());
 
-	}*/
+	}
 
+	@Test
+	public void loginUsuario() throws Exception {
+	//La primera ejecucion puede fallar por ejecutarse antes que registrarUsuario() y no haber datos cargados
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest("Alkemy","1234");
+		AuthenticationResponse authenticationResponse = usuarioController.login(authenticationRequest);
+
+		assertTrue(!authenticationResponse.getToken().isEmpty());
+
+	}
+
+	@Test
+	public void  borrarPelicula1() throws Exception {
+
+		Long id = Long.valueOf(1);
+		ResponseEntity peliculaTest = peliculaController.delete(id);
+
+		assertTrue(peliculaTest.getStatusCode().is2xxSuccessful());
+
+	}
+
+	@Test
+	public void borrarPersonaje4() throws Exception {
+
+		Long id = Long.valueOf(4);
+		ResponseEntity personajeTest = personajeController.delete(id);
+
+		assertTrue(personajeTest.getStatusCode().is2xxSuccessful());
+
+	}
+
+	@Test
+	public void crearPersonajeSinNombre() throws Exception {
+		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().edad(15).peso(50).
+				historia("El es un joven").build();
+		ResponseEntity personajeTest = personajeController.save(personajeReqDTO);
+
+		assertTrue(personajeTest.getStatusCode().is4xxClientError());
+	}
+
+	@Test
+	public void crearPersonajeConNombreRepetido() throws Exception {
+		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().nombre("Cooper").edad(45).peso(80).
+				historia("Viaja por un agujero negro").build();
+		ResponseEntity personajeTest = personajeController.save(personajeReqDTO);
+
+		assertTrue(personajeTest.getStatusCode().is4xxClientError());
+	}
+
+	@Test
+	public void crearPersonajeConEdadNegativa() throws Exception {
+		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().nombre("Personaje de Prueba").edad(-15).peso(50).
+				historia("El es un joven").build();
+		ResponseEntity personajeTest = personajeController.save(personajeReqDTO);
+
+		assertTrue(personajeTest.getStatusCode().is4xxClientError());
+	}
+
+	@Test
+	public void crearPersonajeConPesoNegativo() throws Exception {
+		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().nombre("Personaje de Prueba").edad(15).peso(-50).
+				historia("El es un joven").build();
+		ResponseEntity personajeTest = personajeController.save(personajeReqDTO);
+
+		assertTrue(personajeTest.getStatusCode().is4xxClientError());
+	}
+
+	@Test
+	public void crearPeliculaSinTitulo() throws Exception {
+
+		Date date = new Date(2010-10-30);
+		PeliculaReqDTO peliculaReqDTO = PeliculaReqDTO.builder().fechaCreacion(date).calificacion(5).build();
+
+		ResponseEntity peliculaTest = peliculaController.save(peliculaReqDTO);
+
+		assertTrue(peliculaTest.getStatusCode().is4xxClientError());
+
+	}
+
+	@Test
+	public void crearPeliculaConTituloRepetido() throws Exception {
+
+		Date date = new Date(2010-01-15);
+		PeliculaReqDTO peliculaReqDTO = PeliculaReqDTO.builder().titulo("Pelicula2")
+				.fechaCreacion(date).calificacion(5).build();
+
+		ResponseEntity peliculaTest = peliculaController.save(peliculaReqDTO);
+
+		assertTrue(peliculaTest.getStatusCode().is4xxClientError());
+
+	}
+
+	@Test
+	public void crearPeliculaSinFecha() throws Exception {
+
+		Date date = new Date();
+		PeliculaReqDTO peliculaReqDTO = PeliculaReqDTO.builder().titulo("Pelicula de Prueba").fechaCreacion(date).calificacion(5).build();
+
+		ResponseEntity peliculaTest = peliculaController.save(peliculaReqDTO);
+
+		assertTrue(peliculaTest.getStatusCode().is4xxClientError());
+
+	}
+
+	@Test
+	public void crearPeliculaConCalificacionMenorA1() throws Exception {
+
+		Date date = new Date(2010-10-30);
+		PeliculaReqDTO peliculaReqDTO = PeliculaReqDTO.builder().titulo("Pelicula de Prueba")
+				.fechaCreacion(date).calificacion(0).build();
+
+		ResponseEntity peliculaTest = peliculaController.save(peliculaReqDTO);
+
+		assertTrue(peliculaTest.getStatusCode().is4xxClientError());
+
+	}
+
+	@Test
+	public void crearPeliculaConCalificacionMayorA5() throws Exception {
+
+		Date date = new Date(2010-10-30);
+		PeliculaReqDTO peliculaReqDTO = PeliculaReqDTO.builder().titulo("Pelicula de Prueba")
+				.fechaCreacion(date).calificacion(7).build();
+
+		ResponseEntity peliculaTest = peliculaController.save(peliculaReqDTO);
+
+		assertTrue(peliculaTest.getStatusCode().is4xxClientError());
+
+	}
 }

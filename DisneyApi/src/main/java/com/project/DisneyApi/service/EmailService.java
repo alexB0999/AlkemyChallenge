@@ -22,7 +22,7 @@ public class EmailService {
     @Autowired
     SendGrid sendGrid;
 
-    private String remitente = "alexis.bahi@alumnos.frm.utn.edu.ar";
+    private String remitente = "alexbahi_99@yahoo.com.ar";
 
     private String destinatario;
 

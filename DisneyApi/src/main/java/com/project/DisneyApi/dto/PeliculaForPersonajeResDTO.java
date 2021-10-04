@@ -1,6 +1,5 @@
 package com.project.DisneyApi.dto;
 
-import com.project.DisneyApi.entity.Genero;
 import lombok.*;
 
 import javax.validation.constraints.Max;
@@ -10,7 +9,6 @@ import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Data
 @Builder
 public class PeliculaForPersonajeResDTO extends BaseDTO{

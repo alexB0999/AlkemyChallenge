@@ -3,7 +3,6 @@ package com.project.DisneyApi.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import com.project.DisneyApi.entity.Personaje;
 import com.project.DisneyApi.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
