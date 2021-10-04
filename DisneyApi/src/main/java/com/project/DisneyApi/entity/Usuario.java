@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Data
 @Builder
 public class Usuario extends BaseEntity {

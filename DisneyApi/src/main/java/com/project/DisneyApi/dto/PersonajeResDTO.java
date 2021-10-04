@@ -12,7 +12,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Data
 @Builder
 public class PersonajeResDTO extends BaseDTO{

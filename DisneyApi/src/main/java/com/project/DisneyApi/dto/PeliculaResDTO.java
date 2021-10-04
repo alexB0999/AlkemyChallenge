@@ -12,7 +12,6 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Data
 @Builder
 public class PeliculaResDTO extends BaseDTO{

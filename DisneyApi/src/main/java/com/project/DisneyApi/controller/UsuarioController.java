@@ -65,7 +65,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public AuthenticationResponse createToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
             authenticationManager.authenticate(authentication);

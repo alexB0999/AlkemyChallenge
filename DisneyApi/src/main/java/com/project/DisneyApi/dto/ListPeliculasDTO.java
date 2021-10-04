@@ -9,7 +9,6 @@ import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Data
 @Builder
 public class ListPeliculasDTO extends BaseDTO{

@@ -34,11 +34,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    /*@Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }*/
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

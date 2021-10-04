@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Data
 @Builder
 public class PersonajeForPeliculaResDTO extends BaseDTO{
