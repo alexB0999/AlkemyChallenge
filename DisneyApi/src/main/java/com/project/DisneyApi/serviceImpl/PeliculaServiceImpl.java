@@ -12,15 +12,14 @@ import com.project.DisneyApi.entity.Pelicula;
 import com.project.DisneyApi.repository.BaseRepository;
 import com.project.DisneyApi.repository.PeliculaRepository;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class PeliculaServiceImpl extends BaseServiceImpl<Pelicula, Long> implements PeliculaService {
 	
 	@Autowired
 	PeliculaRepository peliculaRepository;
-	
-	public PeliculaServiceImpl(BaseRepository<Pelicula, Long> baseRepository) {
-        super(baseRepository);
-    }
 
 	@Override
 	public List<Pelicula> search(String name, Long id, String sort) throws Exception {

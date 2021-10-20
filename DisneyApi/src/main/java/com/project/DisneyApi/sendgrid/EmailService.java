@@ -1,4 +1,4 @@
-package com.project.DisneyApi.service;
+package com.project.DisneyApi.sendgrid;
 
 import com.sendgrid.*;
 import com.sendgrid.helpers.mail.Mail;
@@ -13,8 +13,8 @@ import java.io.IOException;
 @Service
 public class EmailService {
 
-    @Value("${app.sendgrid.templateId}")
-    private String templateId;
+    /*@Value("${app.sendgrid.templateId}")
+    private String templateId;*/
 
     @Value("${app.sendgrid.key}")
     private String appkey;
@@ -22,7 +22,7 @@ public class EmailService {
     @Autowired
     SendGrid sendGrid;
 
-    private String remitente = "alexbahi_99@yahoo.com.ar";
+    private String remitente = "alexis.bahi@alumnos.frm.utn.edu.ar";
 
     private String destinatario;
 
@@ -48,7 +48,7 @@ public class EmailService {
         to.setEmail(this.destinatario);
         Content content = new Content("text/plain", mensaje);
         Mail mail = new Mail(from, subject, to, content);
-        mail.setTemplateId(templateId);
+        //mail.setTemplateId(templateId);
 
         SendGrid sg = new SendGrid(appkey);
         Request request = new Request();

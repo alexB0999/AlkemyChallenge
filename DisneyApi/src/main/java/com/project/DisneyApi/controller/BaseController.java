@@ -13,16 +13,16 @@ import com.project.DisneyApi.entity.BaseEntity;
 
 public interface BaseController <DTO extends BaseDTO, E extends BaseEntity, ID extends Serializable> extends Mapper<DTO, E>{
 	
-    public ResponseEntity<?> getAll() throws Exception;
+    ResponseEntity<?> getAll() throws Exception;
 
-    public ResponseEntity<?> getAll(Pageable pageable);
+    ResponseEntity<?> getAll(Pageable pageable);
 
-    public ResponseEntity<?> getOne(@PathVariable ID id) throws Exception;
+    ResponseEntity<?> getOne(@PathVariable ID id) throws Exception;
 
-    public ResponseEntity<?> save(@RequestBody DTO dto) throws Exception;
+    ResponseEntity<?> save(@RequestBody DTO dto) throws Exception;
 
-    public ResponseEntity<?> update(@PathVariable ID id, @RequestBody DTO dto) throws Exception;
+    ResponseEntity<?> update(@PathVariable ID id, @RequestBody DTO dto) throws Exception;
 
-    public ResponseEntity<?> delete(@PathVariable ID id) throws Exception;
+    ResponseEntity<?> delete(@PathVariable ID id) throws Exception;
 
 }
