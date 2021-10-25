@@ -1,9 +1,8 @@
-/*
-package com.project.DisneyApi.security.util;
+package com.project.DisneyApi.security.util;/*package com.crud.crud.util;
 
-import com.project.DisneyApi.security.entity.Rol;
-import com.project.DisneyApi.security.enums.RolNombre;
-import com.project.DisneyApi.security.service.RolService;
+import com.crud.crud.security.entity.Rol;
+import com.crud.crud.security.enums.RolNombre;
+import com.crud.crud.security.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -21,5 +20,4 @@ public class CreateRoles implements CommandLineRunner {
         rolService.save(rolAdmin);
         rolService.save(rolUser);
     }
-}
-*/
+}*/

@@ -10,7 +10,10 @@ import com.project.DisneyApi.security.enums.RolNombre;
 import com.project.DisneyApi.security.jwt.JwtProvider;
 import com.project.DisneyApi.security.service.RolService;
 import com.project.DisneyApi.security.service.UsuarioService;
-import com.project.DisneyApi.sendgrid.EmailService;
+import java.text.ParseException;
+import java.util.HashSet;
+import java.util.Set;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +21,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
@@ -48,11 +49,8 @@ public class AuthController {
     @Autowired
     JwtProvider jwtProvider;
 
-    @Autowired
-    private EmailService emailService;
-
     @PostMapping("/register")
-    public ResponseEntity<?> signin(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult) throws IOException {
+    public ResponseEntity<?> signin(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Mensaje("Campos o email inválidos"), HttpStatus.BAD_REQUEST);
         if(usuarioService.existsByUsername(nuevoUsuario.getUsername()))
@@ -67,8 +65,6 @@ public class AuthController {
             roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
         usuario.setRoles(roles);
         usuarioService.save(usuario);
-        emailService.setDestinatario(usuario.getEmail());
-        emailService.sendWelcomeEmail();
         return new ResponseEntity(new Mensaje("Usuario creado satisfactoriamente"), HttpStatus.CREATED);
     }
 
@@ -81,8 +77,15 @@ public class AuthController {
                         (loginUsuario.getUsername(),loginUsuario.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         JwtDTO jwtDTO = new JwtDTO(jwt);
         return new ResponseEntity(jwtDTO, HttpStatus.OK);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtDTO> refreshToken(@RequestBody JwtDTO jwtDTO) throws ParseException {
+        String token = jwtProvider.refreshToken(jwtDTO);
+        JwtDTO jwt = new JwtDTO(token);
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
+    }
+
 }
