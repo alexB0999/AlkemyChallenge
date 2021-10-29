@@ -1,13 +1,13 @@
-package com.project.DisneyApi.security;
+package com.project.DisneyApi.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
+@NoArgsConstructor
+@Data
+public class JwtDTO {
 
     private String token;
 

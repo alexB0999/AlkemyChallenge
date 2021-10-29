@@ -1,22 +1,19 @@
-package com.project.DisneyApi.dto;
+package com.project.DisneyApi.security.dto;
 
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
-public class DTORegister {
+public class LoginUsuario {
 
+    @NotBlank
     private String username;
 
-    private String email;
-
+    @NotBlank
     private String password;
-
-    private String role;
 
 }

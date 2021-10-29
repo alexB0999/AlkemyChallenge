@@ -8,18 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.DisneyApi.entity.Personaje;
-import com.project.DisneyApi.repository.BaseRepository;
 import com.project.DisneyApi.repository.PersonajeRepository;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class PersonajeServiceImpl extends BaseServiceImpl<Personaje, Long> implements PersonajeService {
 	
 	@Autowired
 	PersonajeRepository personajeRepository;
-	
-	public PersonajeServiceImpl(BaseRepository<Personaje, Long> baseRepository) {
-        super(baseRepository);
-    }
 
 	@Override
 	public List<Personaje> search(String name, Integer age, Long id) throws Exception {
