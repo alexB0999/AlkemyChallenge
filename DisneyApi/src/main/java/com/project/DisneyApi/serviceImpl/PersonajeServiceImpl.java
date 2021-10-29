@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.DisneyApi.entity.Personaje;
-import com.project.DisneyApi.repository.BaseRepository;
 import com.project.DisneyApi.repository.PersonajeRepository;
 
 import javax.transaction.Transactional;

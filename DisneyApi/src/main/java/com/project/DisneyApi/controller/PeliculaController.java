@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.DisneyApi.entity.Pelicula;
@@ -95,6 +96,7 @@ public class PeliculaController extends BaseControllerImpl<PeliculaReqDTO, Pelic
 	}
 	
 	@PostMapping("/create")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> save(@RequestBody PeliculaReqDTO peliculaReqDTO) throws Exception {
 		// Valido si se ingresa un titulo
 		if(StringUtils.isBlank(peliculaReqDTO.getTitulo()))
@@ -115,6 +117,7 @@ public class PeliculaController extends BaseControllerImpl<PeliculaReqDTO, Pelic
 	}
 	
 	@PutMapping("/update/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PeliculaReqDTO peliculaReqDTO) throws Exception {
 		// Valido existencia de la pelicula a actualizar
 		if(!peliculaService.existsById(id))
@@ -144,6 +147,7 @@ public class PeliculaController extends BaseControllerImpl<PeliculaReqDTO, Pelic
 	}
 	
 	@DeleteMapping("/delete/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) throws Exception {
 		if(!peliculaService.existsById(id))
 			return new ResponseEntity(new Mensaje("No existe"), HttpStatus.NOT_FOUND);

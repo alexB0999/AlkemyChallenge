@@ -14,6 +14,7 @@ import com.project.DisneyApi.security.dto.NuevoUsuario;
 import com.project.DisneyApi.security.entity.Rol;
 import com.project.DisneyApi.security.enums.RolNombre;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -166,6 +167,34 @@ class DisneyApiApplicationTests {
 		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().nombre("Cooper").edad(45).peso(80).
 				historia("Viaja por un agujero negro").build();
 		personaje = Mapper.MapperDTOToEntity(personajeReqDTO, personaje);
+
+		assertTrue(personajeReqDTO.getNombre().equals(personaje.getNombre()));
+		assertTrue(personajeReqDTO.getEdad()==personaje.getEdad());
+		assertTrue(personajeReqDTO.getPeso()==personaje.getPeso());
+		assertTrue(personajeReqDTO.getHistoria().equals(personaje.getHistoria()));
+
+	}
+
+	@Test
+	public void MapperEntitytoDTOTest(){
+		Personaje personaje =  Personaje.builder().nombre("Cooper").edad(45).peso(80).
+				historia("Viaja por un agujero negro").build();
+		ModelMapper modelMapper = new ModelMapper();
+		PersonajeReqDTO personajeReqDTO = modelMapper.map(personaje,PersonajeReqDTO.class);
+
+		assertTrue(personajeReqDTO.getNombre().equals(personaje.getNombre()));
+		assertTrue(personajeReqDTO.getEdad()==personaje.getEdad());
+		assertTrue(personajeReqDTO.getPeso()==personaje.getPeso());
+		assertTrue(personajeReqDTO.getHistoria().equals(personaje.getHistoria()));
+
+	}
+
+	@Test
+	public void MapperDTOtoEntitytest(){
+		PersonajeReqDTO personajeReqDTO = PersonajeReqDTO.builder().nombre("Cooper").edad(45).peso(80).
+				historia("Viaja por un agujero negro").build();
+		ModelMapper modelMapper = new ModelMapper();
+		Personaje personaje = modelMapper.map(personajeReqDTO,Personaje.class);
 
 		assertTrue(personajeReqDTO.getNombre().equals(personaje.getNombre()));
 		assertTrue(personajeReqDTO.getEdad()==personaje.getEdad());
